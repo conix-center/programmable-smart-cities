@@ -1,0 +1,1130 @@
+{
+    "application": {
+        "currentSelections": {
+            "story": null,
+            "story_id": "1",
+            "subselection_ids": {
+                "1": "95"
+            },
+            "component_id": null,
+            "component_definition_id": null,
+            "component_instance_id": null,
+            "space_property_id": null,
+            "tool": "Rectangle",
+            "mode": "spaces",
+            "snapMode": "grid-strict",
+            "modeTab": "floorplan",
+            "subselectionType": "spaces"
+        },
+        "modes": [
+            "spaces",
+            "shading",
+            "building_units",
+            "thermal_zones",
+            "pitched_roofs",
+            "space_types",
+            "images"
+        ],
+        "tools": [
+            "Pan",
+            "Drag",
+            "Rectangle",
+            "Polygon",
+            "Eraser",
+            "Select",
+            "Map",
+            "Fill",
+            "Place Component",
+            "Image",
+            "Apply Property"
+        ],
+        "scale": {
+            "x": {
+                "pixels": 1576,
+                "rwuRange": [
+                    -73.62910798122066,
+                    58.629107981220656
+                ]
+            },
+            "y": {
+                "pixels": 852,
+                "rwuRange": [
+                    -98.25,
+                    -26.75
+                ]
+            }
+        }
+    },
+    "project": {
+        "config": {
+            "units": "ip",
+            "unitsEditable": true,
+            "language": "EN-US"
+        },
+        "north_axis": 0,
+        "ground": {
+            "floor_offset": 0,
+            "azimuth_angle": 0,
+            "tilt_slope": 0
+        },
+        "grid": {
+            "visible": true,
+            "spacing": 5
+        },
+        "view": {
+            "min_x": -324.39785578660945,
+            "min_y": -127.2838996493763,
+            "max_x": 130.94768217360445,
+            "max_y": 118.88005868952106
+        },
+        "map": {
+            "initialized": false,
+            "enabled": false,
+            "visible": true,
+            "latitude": 39.7653,
+            "longitude": -104.9863,
+            "zoom": 4.5,
+            "rotation": 0,
+            "elevation": 0
+        },
+        "previous_story": {
+            "visible": true
+        },
+        "show_import_export": true
+    },
+    "stories": [
+        {
+            "id": "1",
+            "handle": null,
+            "name": "Story 1",
+            "image_visible": true,
+            "below_floor_plenum_height": 0,
+            "floor_to_ceiling_height": 8,
+            "above_ceiling_plenum_height": 0,
+            "multiplier": 1,
+            "color": "#88ccee",
+            "geometry": {
+                "id": "2",
+                "vertices": [
+                    {
+                        "id": "5",
+                        "x": -210,
+                        "y": -20,
+                        "edge_ids": [
+                            "9",
+                            "12",
+                            "76"
+                        ]
+                    },
+                    {
+                        "id": "6",
+                        "x": -170,
+                        "y": -20,
+                        "edge_ids": [
+                            "9",
+                            "10",
+                            "17"
+                        ]
+                    },
+                    {
+                        "id": "7",
+                        "x": -170,
+                        "y": -50,
+                        "edge_ids": [
+                            "10",
+                            "11",
+                            "19"
+                        ]
+                    },
+                    {
+                        "id": "8",
+                        "x": -210,
+                        "y": -50,
+                        "edge_ids": [
+                            "11",
+                            "12",
+                            "58"
+                        ]
+                    },
+                    {
+                        "id": "15",
+                        "x": -130,
+                        "y": -20,
+                        "edge_ids": [
+                            "17",
+                            "18",
+                            "24"
+                        ]
+                    },
+                    {
+                        "id": "16",
+                        "x": -130,
+                        "y": -50,
+                        "edge_ids": [
+                            "18",
+                            "19",
+                            "26"
+                        ]
+                    },
+                    {
+                        "id": "22",
+                        "x": -95,
+                        "y": -20,
+                        "edge_ids": [
+                            "24",
+                            "25",
+                            "31"
+                        ]
+                    },
+                    {
+                        "id": "23",
+                        "x": -95,
+                        "y": -50,
+                        "edge_ids": [
+                            "25",
+                            "26",
+                            "33"
+                        ]
+                    },
+                    {
+                        "id": "29",
+                        "x": 0,
+                        "y": -20,
+                        "edge_ids": [
+                            "31",
+                            "32",
+                            "74"
+                        ]
+                    },
+                    {
+                        "id": "30",
+                        "x": 0,
+                        "y": -50,
+                        "edge_ids": [
+                            "32",
+                            "33",
+                            "41"
+                        ]
+                    },
+                    {
+                        "id": "36",
+                        "x": 0,
+                        "y": 15,
+                        "edge_ids": [
+                            "39",
+                            "50",
+                            "78"
+                        ]
+                    },
+                    {
+                        "id": "37",
+                        "x": 35,
+                        "y": 15,
+                        "edge_ids": [
+                            "39",
+                            "40",
+                            "49"
+                        ]
+                    },
+                    {
+                        "id": "38",
+                        "x": 35,
+                        "y": -50,
+                        "edge_ids": [
+                            "40",
+                            "41"
+                        ]
+                    },
+                    {
+                        "id": "46",
+                        "x": 0,
+                        "y": 55,
+                        "edge_ids": [
+                            "48",
+                            "50",
+                            "85"
+                        ]
+                    },
+                    {
+                        "id": "47",
+                        "x": 35,
+                        "y": 55,
+                        "edge_ids": [
+                            "48",
+                            "49"
+                        ]
+                    },
+                    {
+                        "id": "53",
+                        "x": -235,
+                        "y": 15,
+                        "edge_ids": [
+                            "56",
+                            "59",
+                            "98"
+                        ]
+                    },
+                    {
+                        "id": "54",
+                        "x": -210,
+                        "y": 15,
+                        "edge_ids": [
+                            "56",
+                            "79",
+                            "94"
+                        ]
+                    },
+                    {
+                        "id": "55",
+                        "x": -235,
+                        "y": -50,
+                        "edge_ids": [
+                            "58",
+                            "59"
+                        ]
+                    },
+                    {
+                        "id": "71",
+                        "x": -210,
+                        "y": -5,
+                        "edge_ids": [
+                            "76",
+                            "79",
+                            "88"
+                        ]
+                    },
+                    {
+                        "id": "72",
+                        "x": 0,
+                        "y": -5,
+                        "edge_ids": [
+                            "74",
+                            "78",
+                            "83"
+                        ]
+                    },
+                    {
+                        "id": "81",
+                        "x": -15,
+                        "y": -5,
+                        "edge_ids": [
+                            "83",
+                            "86",
+                            "88"
+                        ]
+                    },
+                    {
+                        "id": "82",
+                        "x": -15,
+                        "y": 55,
+                        "edge_ids": [
+                            "85",
+                            "86",
+                            "91"
+                        ]
+                    },
+                    {
+                        "id": "90",
+                        "x": -210,
+                        "y": 55,
+                        "edge_ids": [
+                            "91",
+                            "94",
+                            "97"
+                        ]
+                    },
+                    {
+                        "id": "96",
+                        "x": -235,
+                        "y": 55,
+                        "edge_ids": [
+                            "97",
+                            "98"
+                        ]
+                    }
+                ],
+                "edges": [
+                    {
+                        "id": "9",
+                        "vertex_ids": [
+                            "5",
+                            "6"
+                        ],
+                        "face_ids": [
+                            "13",
+                            "77"
+                        ]
+                    },
+                    {
+                        "id": "10",
+                        "vertex_ids": [
+                            "6",
+                            "7"
+                        ],
+                        "face_ids": [
+                            "13",
+                            "20"
+                        ]
+                    },
+                    {
+                        "id": "11",
+                        "vertex_ids": [
+                            "7",
+                            "8"
+                        ],
+                        "face_ids": [
+                            "13"
+                        ]
+                    },
+                    {
+                        "id": "12",
+                        "vertex_ids": [
+                            "8",
+                            "5"
+                        ],
+                        "face_ids": [
+                            "13",
+                            "60"
+                        ]
+                    },
+                    {
+                        "id": "17",
+                        "vertex_ids": [
+                            "6",
+                            "15"
+                        ],
+                        "face_ids": [
+                            "20",
+                            "77"
+                        ]
+                    },
+                    {
+                        "id": "18",
+                        "vertex_ids": [
+                            "15",
+                            "16"
+                        ],
+                        "face_ids": [
+                            "20",
+                            "27"
+                        ]
+                    },
+                    {
+                        "id": "19",
+                        "vertex_ids": [
+                            "16",
+                            "7"
+                        ],
+                        "face_ids": [
+                            "20"
+                        ]
+                    },
+                    {
+                        "id": "24",
+                        "vertex_ids": [
+                            "15",
+                            "22"
+                        ],
+                        "face_ids": [
+                            "27",
+                            "77"
+                        ]
+                    },
+                    {
+                        "id": "25",
+                        "vertex_ids": [
+                            "22",
+                            "23"
+                        ],
+                        "face_ids": [
+                            "27",
+                            "34"
+                        ]
+                    },
+                    {
+                        "id": "26",
+                        "vertex_ids": [
+                            "23",
+                            "16"
+                        ],
+                        "face_ids": [
+                            "27"
+                        ]
+                    },
+                    {
+                        "id": "31",
+                        "vertex_ids": [
+                            "22",
+                            "29"
+                        ],
+                        "face_ids": [
+                            "34",
+                            "77"
+                        ]
+                    },
+                    {
+                        "id": "32",
+                        "vertex_ids": [
+                            "29",
+                            "30"
+                        ],
+                        "face_ids": [
+                            "34",
+                            "43"
+                        ]
+                    },
+                    {
+                        "id": "33",
+                        "vertex_ids": [
+                            "30",
+                            "23"
+                        ],
+                        "face_ids": [
+                            "34"
+                        ]
+                    },
+                    {
+                        "id": "39",
+                        "vertex_ids": [
+                            "36",
+                            "37"
+                        ],
+                        "face_ids": [
+                            "43",
+                            "51"
+                        ]
+                    },
+                    {
+                        "id": "40",
+                        "vertex_ids": [
+                            "37",
+                            "38"
+                        ],
+                        "face_ids": [
+                            "43"
+                        ]
+                    },
+                    {
+                        "id": "41",
+                        "vertex_ids": [
+                            "38",
+                            "30"
+                        ],
+                        "face_ids": [
+                            "43"
+                        ]
+                    },
+                    {
+                        "id": "48",
+                        "vertex_ids": [
+                            "46",
+                            "47"
+                        ],
+                        "face_ids": [
+                            "51"
+                        ]
+                    },
+                    {
+                        "id": "49",
+                        "vertex_ids": [
+                            "47",
+                            "37"
+                        ],
+                        "face_ids": [
+                            "51"
+                        ]
+                    },
+                    {
+                        "id": "50",
+                        "vertex_ids": [
+                            "36",
+                            "46"
+                        ],
+                        "face_ids": [
+                            "51",
+                            "87"
+                        ]
+                    },
+                    {
+                        "id": "56",
+                        "vertex_ids": [
+                            "53",
+                            "54"
+                        ],
+                        "face_ids": [
+                            "60",
+                            "99"
+                        ]
+                    },
+                    {
+                        "id": "58",
+                        "vertex_ids": [
+                            "8",
+                            "55"
+                        ],
+                        "face_ids": [
+                            "60"
+                        ]
+                    },
+                    {
+                        "id": "59",
+                        "vertex_ids": [
+                            "55",
+                            "53"
+                        ],
+                        "face_ids": [
+                            "60"
+                        ]
+                    },
+                    {
+                        "id": "74",
+                        "vertex_ids": [
+                            "72",
+                            "29"
+                        ],
+                        "face_ids": [
+                            "43",
+                            "77"
+                        ]
+                    },
+                    {
+                        "id": "76",
+                        "vertex_ids": [
+                            "5",
+                            "71"
+                        ],
+                        "face_ids": [
+                            "60",
+                            "77"
+                        ]
+                    },
+                    {
+                        "id": "78",
+                        "vertex_ids": [
+                            "72",
+                            "36"
+                        ],
+                        "face_ids": [
+                            "43",
+                            "87"
+                        ]
+                    },
+                    {
+                        "id": "79",
+                        "vertex_ids": [
+                            "54",
+                            "71"
+                        ],
+                        "face_ids": [
+                            "60",
+                            "93"
+                        ]
+                    },
+                    {
+                        "id": "83",
+                        "vertex_ids": [
+                            "81",
+                            "72"
+                        ],
+                        "face_ids": [
+                            "77",
+                            "87"
+                        ]
+                    },
+                    {
+                        "id": "85",
+                        "vertex_ids": [
+                            "46",
+                            "82"
+                        ],
+                        "face_ids": [
+                            "87"
+                        ]
+                    },
+                    {
+                        "id": "86",
+                        "vertex_ids": [
+                            "82",
+                            "81"
+                        ],
+                        "face_ids": [
+                            "87",
+                            "93"
+                        ]
+                    },
+                    {
+                        "id": "88",
+                        "vertex_ids": [
+                            "71",
+                            "81"
+                        ],
+                        "face_ids": [
+                            "77",
+                            "93"
+                        ]
+                    },
+                    {
+                        "id": "91",
+                        "vertex_ids": [
+                            "82",
+                            "90"
+                        ],
+                        "face_ids": [
+                            "93"
+                        ]
+                    },
+                    {
+                        "id": "94",
+                        "vertex_ids": [
+                            "90",
+                            "54"
+                        ],
+                        "face_ids": [
+                            "93",
+                            "99"
+                        ]
+                    },
+                    {
+                        "id": "97",
+                        "vertex_ids": [
+                            "96",
+                            "90"
+                        ],
+                        "face_ids": [
+                            "99"
+                        ]
+                    },
+                    {
+                        "id": "98",
+                        "vertex_ids": [
+                            "53",
+                            "96"
+                        ],
+                        "face_ids": [
+                            "99"
+                        ]
+                    }
+                ],
+                "faces": [
+                    {
+                        "id": "13",
+                        "edge_ids": [
+                            "9",
+                            "10",
+                            "11",
+                            "12"
+                        ],
+                        "edge_order": [
+                            1,
+                            1,
+                            1,
+                            1
+                        ]
+                    },
+                    {
+                        "id": "20",
+                        "edge_ids": [
+                            "17",
+                            "18",
+                            "19",
+                            "10"
+                        ],
+                        "edge_order": [
+                            1,
+                            1,
+                            1,
+                            0
+                        ]
+                    },
+                    {
+                        "id": "27",
+                        "edge_ids": [
+                            "24",
+                            "25",
+                            "26",
+                            "18"
+                        ],
+                        "edge_order": [
+                            1,
+                            1,
+                            1,
+                            0
+                        ]
+                    },
+                    {
+                        "id": "34",
+                        "edge_ids": [
+                            "31",
+                            "32",
+                            "33",
+                            "25"
+                        ],
+                        "edge_order": [
+                            1,
+                            1,
+                            1,
+                            0
+                        ]
+                    },
+                    {
+                        "id": "43",
+                        "edge_ids": [
+                            "39",
+                            "40",
+                            "41",
+                            "32",
+                            "74",
+                            "78"
+                        ],
+                        "edge_order": [
+                            1,
+                            1,
+                            1,
+                            0,
+                            0,
+                            1
+                        ]
+                    },
+                    {
+                        "id": "51",
+                        "edge_ids": [
+                            "48",
+                            "49",
+                            "39",
+                            "50"
+                        ],
+                        "edge_order": [
+                            1,
+                            1,
+                            0,
+                            1
+                        ]
+                    },
+                    {
+                        "id": "60",
+                        "edge_ids": [
+                            "56",
+                            "79",
+                            "76",
+                            "12",
+                            "58",
+                            "59"
+                        ],
+                        "edge_order": [
+                            1,
+                            1,
+                            0,
+                            0,
+                            1,
+                            1
+                        ]
+                    },
+                    {
+                        "id": "77",
+                        "edge_ids": [
+                            "88",
+                            "83",
+                            "74",
+                            "31",
+                            "24",
+                            "17",
+                            "9",
+                            "76"
+                        ],
+                        "edge_order": [
+                            1,
+                            1,
+                            1,
+                            0,
+                            0,
+                            0,
+                            0,
+                            1
+                        ]
+                    },
+                    {
+                        "id": "87",
+                        "edge_ids": [
+                            "83",
+                            "78",
+                            "50",
+                            "85",
+                            "86"
+                        ],
+                        "edge_order": [
+                            1,
+                            1,
+                            1,
+                            1,
+                            1
+                        ]
+                    },
+                    {
+                        "id": "93",
+                        "edge_ids": [
+                            "91",
+                            "94",
+                            "79",
+                            "88",
+                            "86"
+                        ],
+                        "edge_order": [
+                            1,
+                            1,
+                            1,
+                            1,
+                            0
+                        ]
+                    },
+                    {
+                        "id": "99",
+                        "edge_ids": [
+                            "97",
+                            "94",
+                            "56",
+                            "98"
+                        ],
+                        "edge_order": [
+                            1,
+                            1,
+                            0,
+                            1
+                        ]
+                    }
+                ]
+            },
+            "images": [],
+            "spaces": [
+                {
+                    "id": "3",
+                    "handle": null,
+                    "name": "Space 1 - 1",
+                    "face_id": "13",
+                    "building_unit_id": null,
+                    "thermal_zone_id": null,
+                    "space_type_id": null,
+                    "construction_set_id": null,
+                    "pitched_roof_id": null,
+                    "daylighting_controls": [],
+                    "below_floor_plenum_height": null,
+                    "floor_to_ceiling_height": null,
+                    "above_ceiling_plenum_height": null,
+                    "floor_offset": null,
+                    "open_to_below": null,
+                    "color": "#88ccee",
+                    "type": "space"
+                },
+                {
+                    "id": "14",
+                    "handle": null,
+                    "name": "Space 1 - 2",
+                    "face_id": "20",
+                    "building_unit_id": null,
+                    "thermal_zone_id": null,
+                    "space_type_id": null,
+                    "construction_set_id": null,
+                    "pitched_roof_id": null,
+                    "daylighting_controls": [],
+                    "below_floor_plenum_height": null,
+                    "floor_to_ceiling_height": null,
+                    "above_ceiling_plenum_height": null,
+                    "floor_offset": null,
+                    "open_to_below": null,
+                    "color": "#332288",
+                    "type": "space"
+                },
+                {
+                    "id": "21",
+                    "handle": null,
+                    "name": "Space 1 - 3",
+                    "face_id": "27",
+                    "building_unit_id": null,
+                    "thermal_zone_id": null,
+                    "space_type_id": null,
+                    "construction_set_id": null,
+                    "pitched_roof_id": null,
+                    "daylighting_controls": [],
+                    "below_floor_plenum_height": null,
+                    "floor_to_ceiling_height": null,
+                    "above_ceiling_plenum_height": null,
+                    "floor_offset": null,
+                    "open_to_below": null,
+                    "color": "#117733",
+                    "type": "space"
+                },
+                {
+                    "id": "28",
+                    "handle": null,
+                    "name": "Space 1 - 4",
+                    "face_id": "34",
+                    "building_unit_id": null,
+                    "thermal_zone_id": null,
+                    "space_type_id": null,
+                    "construction_set_id": null,
+                    "pitched_roof_id": null,
+                    "daylighting_controls": [],
+                    "below_floor_plenum_height": null,
+                    "floor_to_ceiling_height": null,
+                    "above_ceiling_plenum_height": null,
+                    "floor_offset": null,
+                    "open_to_below": null,
+                    "color": "#999933",
+                    "type": "space"
+                },
+                {
+                    "id": "35",
+                    "handle": null,
+                    "name": "Space 1 - 5",
+                    "face_id": "43",
+                    "building_unit_id": null,
+                    "thermal_zone_id": null,
+                    "space_type_id": null,
+                    "construction_set_id": null,
+                    "pitched_roof_id": null,
+                    "daylighting_controls": [],
+                    "below_floor_plenum_height": null,
+                    "floor_to_ceiling_height": null,
+                    "above_ceiling_plenum_height": null,
+                    "floor_offset": null,
+                    "open_to_below": null,
+                    "color": "#ddcc77",
+                    "type": "space"
+                },
+                {
+                    "id": "45",
+                    "handle": null,
+                    "name": "Space 1 - 6",
+                    "face_id": "51",
+                    "building_unit_id": null,
+                    "thermal_zone_id": null,
+                    "space_type_id": null,
+                    "construction_set_id": null,
+                    "pitched_roof_id": null,
+                    "daylighting_controls": [],
+                    "below_floor_plenum_height": null,
+                    "floor_to_ceiling_height": null,
+                    "above_ceiling_plenum_height": null,
+                    "floor_offset": null,
+                    "open_to_below": null,
+                    "color": "#cc6677",
+                    "type": "space"
+                },
+                {
+                    "id": "52",
+                    "handle": null,
+                    "name": "Space 1 - 7",
+                    "face_id": "60",
+                    "building_unit_id": null,
+                    "thermal_zone_id": null,
+                    "space_type_id": null,
+                    "construction_set_id": null,
+                    "pitched_roof_id": null,
+                    "daylighting_controls": [],
+                    "below_floor_plenum_height": null,
+                    "floor_to_ceiling_height": null,
+                    "above_ceiling_plenum_height": null,
+                    "floor_offset": null,
+                    "open_to_below": null,
+                    "color": "#882255",
+                    "type": "space"
+                },
+                {
+                    "id": "70",
+                    "handle": null,
+                    "name": "Space 1 - 8",
+                    "face_id": "77",
+                    "building_unit_id": null,
+                    "thermal_zone_id": null,
+                    "space_type_id": null,
+                    "construction_set_id": null,
+                    "pitched_roof_id": null,
+                    "daylighting_controls": [],
+                    "below_floor_plenum_height": null,
+                    "floor_to_ceiling_height": null,
+                    "above_ceiling_plenum_height": null,
+                    "floor_offset": null,
+                    "open_to_below": null,
+                    "color": "#44aa99",
+                    "type": "space"
+                },
+                {
+                    "id": "80",
+                    "handle": null,
+                    "name": "Space 1 - 9",
+                    "face_id": "87",
+                    "building_unit_id": null,
+                    "thermal_zone_id": null,
+                    "space_type_id": null,
+                    "construction_set_id": null,
+                    "pitched_roof_id": null,
+                    "daylighting_controls": [],
+                    "below_floor_plenum_height": null,
+                    "floor_to_ceiling_height": null,
+                    "above_ceiling_plenum_height": null,
+                    "floor_offset": null,
+                    "open_to_below": null,
+                    "color": "#6699cc",
+                    "type": "space"
+                },
+                {
+                    "id": "89",
+                    "handle": null,
+                    "name": "Space 1 - 10",
+                    "face_id": "93",
+                    "building_unit_id": null,
+                    "thermal_zone_id": null,
+                    "space_type_id": null,
+                    "construction_set_id": null,
+                    "pitched_roof_id": null,
+                    "daylighting_controls": [],
+                    "below_floor_plenum_height": null,
+                    "floor_to_ceiling_height": null,
+                    "above_ceiling_plenum_height": null,
+                    "floor_offset": null,
+                    "open_to_below": null,
+                    "color": "#661100",
+                    "type": "space"
+                },
+                {
+                    "id": "95",
+                    "handle": null,
+                    "name": "Space 1 - 11",
+                    "face_id": "99",
+                    "building_unit_id": null,
+                    "thermal_zone_id": null,
+                    "space_type_id": null,
+                    "construction_set_id": null,
+                    "pitched_roof_id": null,
+                    "daylighting_controls": [],
+                    "below_floor_plenum_height": null,
+                    "floor_to_ceiling_height": null,
+                    "above_ceiling_plenum_height": null,
+                    "floor_offset": null,
+                    "open_to_below": null,
+                    "color": "#aa4466",
+                    "type": "space"
+                }
+            ],
+            "shading": [
+                {
+                    "id": "4",
+                    "handle": null,
+                    "name": "Shading 1 - 1",
+                    "face_id": null,
+                    "color": "#E8E3E5"
+                }
+            ],
+            "windows": [],
+            "doors": []
+        }
+    ],
+    "building_units": [],
+    "thermal_zones": [],
+    "space_types": [],
+    "construction_sets": [],
+    "window_definitions": [],
+    "daylighting_control_definitions": [],
+    "pitched_roofs": [],
+    "door_definitions": [],
+    "version": "0.7.0"
+}
