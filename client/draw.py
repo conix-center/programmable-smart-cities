@@ -100,7 +100,7 @@ def get_data(db, rooms):
     resp = db.get_data(uuids)
     df = pd.DataFrame.from_records(resp)
     df = df.set_index(pd.to_datetime(df.pop('timestamp')))
-    df = df.groupby('uuid').resample('5T').mean().reset_index()
+    df = df.groupby('uuid').resample('30T').mean().reset_index()
     df = df.set_index(df.pop('timestamp'))
     df = df.rename(columns={'uuid': 'sensor'})
     return df.dropna()

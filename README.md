@@ -45,6 +45,8 @@ buildings/ciee/
 
 ## Running the VR Demo
 
+Currently, the demo renders a rough floor plan and streams historical temperature data to color the different rooms on the floor plan
+
 1. Install dependencies in `client/requirements.txt` (if you don't want
    `docker` as a dependency, replace `brickschema[allegro]` with `brickschema`.
    If you are on a recent Linux system and want to try some cool new reasoning
