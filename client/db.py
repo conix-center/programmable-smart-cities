@@ -1,8 +1,8 @@
 import os
 import re
 import glob
-import reasonable
 from brickschema.graph import Graph
+from brickschema.inference import BrickInferenceSession
 from brickschema.namespaces import bind_prefixes
 import csv
 import sqlite3
@@ -43,9 +43,8 @@ class DB:
                 # conn.executemany("""INSERT OR IGNORE INTO triples(subject, predicate, object) \
                 #                     VALUES(?, ?, ?)""", values)
                 # conn.commit()
-            r = reasonable.PyReasoner()
-            r.from_graph(g)
-            triples = r.reason()
+            g = BrickInferenceSession().expand(g)
+            triples = list(g.g)
             conn.executemany("""INSERT OR IGNORE INTO triples(subject, predicate, object) \
                                 VALUES(?, ?, ?)""", triples)
             conn.commit()
@@ -120,19 +119,6 @@ CREATE TABLE IF NOT EXISTS triples (
         subject TEXT NOT NULL,
         predicate TEXT NOT NULL,
         object NOT NULL
-);
-
-CREATE TABLE IF NOT EXISTS reasoned (
-        subject TEXT NOT NULL,
-        predicate TEXT NOT NULL,
-        object NOT NULL
-);
-
-CREATE TABLE IF NOT EXISTS datasets (
-        name TEXT NOT NULL,
-        query TEXT NOT NULL,
-        created DATETIME DEFAULT CURRENT_TIMESTAMP,
-        UNIQUE(name)
 );
 
 CREATE VIEW IF NOT EXISTS data_counts AS

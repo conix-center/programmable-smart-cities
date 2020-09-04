@@ -7,7 +7,6 @@ import requests
 import pandas as pd
 
 UNIVERSE="realm"
-NAMESPACE="gabe"
 BROKER="oz.andrew.cmu.edu"
 c = mqtt.Client()
 c.connect(BROKER)
@@ -44,7 +43,7 @@ def get_rooms(db):
     return list(rooms.values())
 
 
-def render_boxes(rooms):
+def render_boxes(scene, rooms):
     for r in rooms:
         print(r)
         min_x = min(r['box'][0][0], r['box'][1][0])
@@ -75,11 +74,11 @@ def render_boxes(rooms):
                     "position": {"x": mid_x, "y": 1, "z": mid_z},
                     "rotation": {"x": 0, "y": 0, "z": 0, "w": 1},
                     "scale": {"x": 1, "y": 1, "z": 1}}}
-        render(text)
-        render(o)
+        render(scene, text)
+        render(scene, o)
 
-def render(o):
-    topic = f"{UNIVERSE}/s/{NAMESPACE}/{o['object_id']}"
+def render(scene, o):
+    topic = f"{UNIVERSE}/s/{scene}/{o['object_id']}"
     # print(topic)
     # print(json.dumps(o))
     x = c.publish(topic, json.dumps(o))
@@ -106,10 +105,10 @@ def get_data(db, rooms):
     df = df.rename(columns={'uuid': 'sensor'})
     return df.dropna()
 
-def render_loop(db):
+def render_loop(scene, db):
     rooms = get_rooms(db)
-    render_boxes(rooms)
-    print(f"View on https://xr.andrew.cmu.edu/?scene={NAMESPACE}")
+    render_boxes(scene, rooms)
+    print(f"View on https://xr.andrew.cmu.edu/?scene={scene}")
     df = get_data(db, rooms)
     print(f"Looping through data")
     for ts in df.index:
@@ -130,5 +129,5 @@ def render_loop(db):
                     "material": {"color": f"#{color}"},
                 }
             }
-            render(o)
+            render(scene, o)
         time.sleep(.1)
