@@ -1,4 +1,8 @@
+# Year 3 Demo
+
 ## Setting Up A Building
+
+This configures a local repository of building data + metadata to be used in the demo.
 
 In the `buildings/` directory, place the following files:
 
@@ -39,7 +43,7 @@ buildings/ciee/
 └── mapping.json
 ```
 
-## Running
+## Running the VR Demo
 
 1. Install dependencies in `client/requirements.txt` (if you don't want
    `docker` as a dependency, replace `brickschema[allegro]` with `brickschema`.
