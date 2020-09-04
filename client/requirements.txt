@@ -1,0 +1,5 @@
+pandas
+requests
+paho-mqtt
+rdflib
+brickschema[allegro]
