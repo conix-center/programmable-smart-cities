@@ -1,7 +1,8 @@
 from flask import Flask, request, json, jsonify, redirect
 import logging
-import os
+import time
 import inspect
+import threading
 from datetime import datetime
 
 app = Flask(__name__, static_url_path='/static')
@@ -19,6 +20,18 @@ impls.append(DemoFault())
 from faults.demo_vavs import VAVDemoFault
 impls.append(VAVDemoFault(5))
 
+# do one update loop and read from shared status
+statuses = []
+def update(interval):
+    global statuses
+    while True:
+        statuses = []
+        for impl in impls:
+            code = inspect.getsource(inspect.getmodule(impl))
+            for fault in impl.get_fault_up_until(datetime.now()):
+                fault['code'] = code
+                statuses.append(fault)
+        time.sleep(interval)
 
 @app.route('/', methods=['GET'])
 def root():
@@ -27,15 +40,10 @@ def root():
 
 @app.route('/get_status', methods=['GET'])
 def get_status():
-    res = []
-    for impl in impls:
-        code = inspect.getsource(inspect.getmodule(impl))
-        for fault in impl.get_fault_up_until(datetime.now()):
-            print(fault)
-            fault['code'] = code
-            res.append(fault)
-    return jsonify(res)
+    return jsonify(statuses)
 
 
 if __name__ == '__main__':
+    t = threading.Thread(target=update, args=(5,))
+    t.start()
     app.run(host='localhost', port='8081')
