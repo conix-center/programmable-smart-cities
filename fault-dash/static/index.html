@@ -1,0 +1,29 @@
+<html>
+    <head>
+        <title>Fault Dashboard</title>
+        <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap/dist/css/bootstrap.min.css" />
+        <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.css" />
+        <script src="//unpkg.com/vue@latest/dist/vue.min.js"></script>
+        <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.js"></script>
+        <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue-icons.min.js"></script>
+        <script src="https://unpkg.com/dayjs@1.8.35/dayjs.min.js"></script>
+        <script src="https://unpkg.com/dayjs@1.8.35/plugin/duration.js"></script>
+        <script src="https://unpkg.com/dayjs@1.8.35/plugin/relativeTime.js"></script>
+
+        <script src="static/app.js"></script>
+    </head>
+    <body>
+        <b-container fluid id="app">
+            <h2>Statuses</h2>
+            <b-row>
+                <b-col cols="10">
+                    <statustable v-bind:statuses="statuses"></statustable>
+                </b-col>
+                <b-col cols="2">
+                    Sidebar
+                </b-col>
+            </b-row>
+        </b-container>
+    </body>
+
+</html>
