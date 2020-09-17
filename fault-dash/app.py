@@ -21,16 +21,19 @@ from faults.demo_vavs import VAVDemoFault
 impls.append(VAVDemoFault(5))
 
 # do one update loop and read from shared status
+statusLock = threading.Lock()
 statuses = []
 def update(interval):
     global statuses
     while True:
+        statusLock.acquire()
         statuses = []
         for impl in impls:
             code = inspect.getsource(inspect.getmodule(impl))
             for fault in impl.get_fault_up_until(datetime.now()):
                 fault['code'] = code
                 statuses.append(fault)
+        statusLock.release()
         time.sleep(interval)
 
 @app.route('/', methods=['GET'])
@@ -40,7 +43,11 @@ def root():
 
 @app.route('/get_status', methods=['GET'])
 def get_status():
-    return jsonify(statuses)
+    statusLock.acquire()
+    res = jsonify(statuses)
+    statusLock.release()
+    return res
+
 
 
 if __name__ == '__main__':
