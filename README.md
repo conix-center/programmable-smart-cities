@@ -19,29 +19,30 @@ In the `buildings/` directory, place the following files:
     ```
     
 3. `floorplan.json`: this is a JSON file exported from [the NREL floorplan maker](https://nrel.github.io/floorspace.js/). You can upload an image to the site and create "Spaces" by clicking to create vertices. Remember to create a new Space for each room, and *at this point in time* only create regular quadrilaterals; arbitrary polygons do not work.
+
 4. `mapping.json`: a single JSON dictionary of `Brick entity => Space ID`; this encodes which Spaces in the floorplan file correspond to which Brick rooms/floors/zones in the `.ttl` files
 
-See `buildings/ciee` for an example (the `data.tar.gz` file produces the `data/` folder):
+    See `buildings/ciee` for an example (the `data.tar.gz` file produces the `data/` folder):
 
-```
-$ tree buildings/ciee/
-buildings/ciee/
-├── Brick.ttl
-├── ciee.ttl
-├── data
-│   ├── 2018-01-01T00:00:00Z.csv
-│   ├── 2018-01-02T00:00:00Z.csv
-│   ├── 2018-01-03T00:00:00Z.csv
-│   ├── 2018-01-04T00:00:00Z.csv
-│   ├── 2018-01-05T00:00:00Z.csv
-│   ├── 2018-01-06T00:00:00Z.csv
-│   ├── 2018-01-07T00:00:00Z.csv
-│   ├── 2018-01-08T00:00:00Z.csv
-│   └── 2018-01-09T00:00:00Z.csv
-├── data.tar.gz
-├── floorplan.json
-└── mapping.json
-```
+    ```
+    $ tree buildings/ciee/
+    buildings/ciee/
+    ├── Brick.ttl
+    ├── ciee.ttl
+    ├── data
+    │   ├── 2018-01-01T00:00:00Z.csv
+    │   ├── 2018-01-02T00:00:00Z.csv
+    │   ├── 2018-01-03T00:00:00Z.csv
+    │   ├── 2018-01-04T00:00:00Z.csv
+    │   ├── 2018-01-05T00:00:00Z.csv
+    │   ├── 2018-01-06T00:00:00Z.csv
+    │   ├── 2018-01-07T00:00:00Z.csv
+    │   ├── 2018-01-08T00:00:00Z.csv
+    │   └── 2018-01-09T00:00:00Z.csv
+    ├── data.tar.gz
+    ├── floorplan.json
+    └── mapping.json
+    ```
 
 ## Running the VR Demo
 

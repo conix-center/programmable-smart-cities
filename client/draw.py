@@ -7,7 +7,7 @@ import requests
 import pandas as pd
 
 UNIVERSE="realm"
-BROKER="oz.andrew.cmu.edu"
+BROKER="arena.andrew.cmu.edu"
 c = mqtt.Client()
 c.connect(BROKER)
 
@@ -108,7 +108,7 @@ def get_data(db, rooms):
 def render_loop(scene, db):
     rooms = get_rooms(db)
     render_boxes(scene, rooms)
-    print(f"View on https://xr.andrew.cmu.edu/?scene={scene}")
+    print(f"View on https://arena.andrew.cmu.edu/?scene={scene}")
     df = get_data(db, rooms)
     print(f"Looping through data")
     for ts in df.index:
