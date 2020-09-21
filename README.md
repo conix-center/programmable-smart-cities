@@ -61,3 +61,8 @@ Currently, the demo renders a rough floor plan and streams historical temperatur
     - arg 3: the name of the ARENA scene
 4. **note**: the ARENA objects are streamed and not persisted, so you will need
    to navigate to the scene in your browser *before* starting the client.
+
+
+## Available Buildings
+1. `buildings/ciee`: The associated files are contained in this repository.
+2. `buildings/ebu3b`: Its Tarball is available [here](https://drive.google.com/file/d/1MHihVVQevC7kncBmbu4IAuyYKvIozRE3/view?usp=sharing). You should be a member of CONIX to access the file.
