@@ -19,6 +19,12 @@ def parse_uri(s):
         return rdflib.URIRef(s)
     return rdflib.BNode(s)
 
+def csv2rows(csvfile):
+    with open(csvfile, 'r') as fp:
+        dr = csv.DictReader(fp)
+        to_db = [(i['timestamp'], i['id'], i['value']) for i in dr]
+    return to_db
+
 
 class DB:
     def __init__(self, folder, dbfile, limit):
@@ -52,13 +58,14 @@ class DB:
             # load in data
             for csvf in sorted(csvfiles)[:limit]:
                 print(f"Loading CSV file {csvf}")
-                with open(csvf) as f:
-                    rdr = csv.reader(f)
-                    next(rdr) # consume header
-                    vals = list(rdr)
-                    conn.executemany("""INSERT OR IGNORE INTO data(timestamp, uuid, value) \
-                                        VALUES(?, ?, ?)""", vals)
-                    conn.commit()
+                rows = csv2rows(csvf)
+                #with open(csvf) as f:
+                #    rdr = csv.reader(f)
+                #    next(rdr) # consume header
+                #    vals = list(rdr)
+                conn.executemany("""INSERT OR IGNORE INTO data(timestamp, uuid, value) \
+                                    VALUES(?, ?, ?)""", rows)
+                conn.commit()
         else:
             conn = sqlite3.connect(dbfile)
             conn.row_factory = sqlite3.Row
