@@ -66,4 +66,4 @@ Currently, the demo renders a rough floor plan and streams historical temperatur
 
 ## Available Buildings
 1. `buildings/ciee`: The associated files are contained in this repository.
-2. `buildings/ebu3b`: Its Tarball is available [here](https://drive.google.com/file/d/1MHihVVQevC7kncBmbu4IAuyYKvIozRE3/view?usp=sharing). You should be a member of CONIX to access the file.
+2. `buildings/ebu3b`: Its Tarball is available [here](https://drive.google.com/file/d/10xyEUPiz3DSTDBu63AefJKpq5xkL-wnE/view?usp=sharing). You should be a member of CONIX to access the file.
