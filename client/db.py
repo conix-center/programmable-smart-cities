@@ -83,6 +83,18 @@ class DB:
         self.g = g
         self.conn = conn
 
+    def get_data_bounds(self, uuids):
+        """
+        Returns a tuple of (max, min) for all the values
+        for all the uuids
+        """
+        with self.conn:
+            array = ', '.join(['?'] * len(uuids))
+            res = self.conn.execute(f"SELECT MAX(value), MIN(value) FROM \
+                data WHERE uuid IN ({array})", uuids)
+            return res[0]
+            # return list(map(dict, res))
+
     def sparql(self, query):
         return self.g.query(query)
 
@@ -106,7 +118,6 @@ class DB:
         insertq = ', '.join(['?' for var in varlist])
         viewdef = f"CREATE TABLE {name} ({atts});"
         insert = f"INSERT INTO {name}({inserts}) VALUES ({insertq})"
-        print
         with self.conn:
             self.conn.execute(f"DROP TABLE IF EXISTS {name}")
             self.conn.execute(viewdef)

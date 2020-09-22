@@ -1,13 +1,10 @@
 import paho.mqtt.client as mqtt
 import time
 import json
-import math
-import secrets
-import requests
 import pandas as pd
 
-UNIVERSE="realm"
-BROKER="arena.andrew.cmu.edu"
+UNIVERSE = "realm"
+BROKER = "arena.andrew.cmu.edu"
 c = mqtt.Client()
 c.connect(BROKER)
 
@@ -85,13 +82,13 @@ def render(scene, o):
     # print(x)
 
 
-def temp_to_color(v):
-    mp = 18.
-    if v > mp:
-        redness = int(255 * (v - mp)/4.)
-        return f"{redness:02x}1111"
-    blueness = int(255 * (mp - v)/4.)
-    return f"1111{blueness:02x}"
+def temp_to_color(v, maxval=80, minval=60):
+    mp = (maxval + minval) / 2.
+    diff = (maxval - mp)
+    redness = 255 + int(255 * (min((v-mp)/diff, 0)))
+    blueness = 255 + int(255 * (min((mp-v)/diff, 0)))
+    # being closer to the midpoint should give us purple
+    return f"{redness:02x}11{blueness:02x}"
 
 
 def get_data(db, rooms):
@@ -110,9 +107,10 @@ def render_loop(scene, db):
     render_boxes(scene, rooms)
     print(f"View on https://arena.andrew.cmu.edu/?scene={scene}")
     df = get_data(db, rooms)
-    print(f"Looping through data")
+    maxb, minb = df['value'].max(), df['value'].min()
+    print(f"Looping through data", maxb, minb)
     for ts in df.index:
-        # print(">>>>>>>>>>>>>>", ts)
+        print(">>>>>>>>>>>>>>", ts)
         for row in df.loc[ts].iterrows():
             sensor = row[1]['sensor']
             for room in rooms:
@@ -120,7 +118,8 @@ def render_loop(scene, db):
                     room = room['room']
                     break
             value = row[1]['value']
-            color = temp_to_color(value)
+            color = temp_to_color(value, maxval=maxb, minval=minb)
+            print(sensor, value, color)
             o = {
                 "object_id": room.split('#')[-1],
                 "action": "update",
