@@ -1,6 +1,5 @@
 import pandas as pd
 import time
-import duckdb
 import rdflib
 import requests
 
@@ -58,7 +57,7 @@ class ReasonableClient:
                 raise Exception("Could not add triples", resp.content)
 
     def is_type(self, item, klass):
-        q = f"ASK {{ <{item}> rdf:type <{klass}> }}"
+        q = f"ASK {{ <{item}> rdf:type/rdfs:subClassOf* <{klass}> }}"
         resp = requests.post(f"{self.addr}/query", json=q)
         return resp.json()[0][0] == 'true'
 
@@ -78,32 +77,3 @@ if __name__ == '__main__':
         ?thing brick:controls?/brick:feeds+ ?zone .
         ?zone rdf:type brick:HVAC_Zone
     }""")
-
-# c.load_file("../buildings/ciee/ciee.ttl")
-
-# con = duckdb.connect(database='test.db', read_only=False)
-# con.execute("""DROP TABLE IF EXISTS data;""")
-# con.execute("""CREATE TABLE data(
-#     time TIMESTAMP,
-#     id VARCHAR,
-#     value REAL
-# );""")
-# con.execute("""CREATE INDEX IF NOT EXISTS data_time_idx ON data (time, id)""")
-# con.execute("COPY data FROM '../buildings/ciee/data/2018-01-01T00:00:00Z.csv' ( HEADER )");
-# con.execute("COPY data FROM '../buildings/ciee/data/2018-01-02T00:00:00Z.csv' ( HEADER )");
-# con.execute("COPY data FROM '../buildings/ciee/data/2018-01-03T00:00:00Z.csv' ( HEADER )");
-# con.commit()
-#
-# df = con.execute("SELECT * FROM data where time > TIMESTAMP '2018-01-01 12:00:00' and time < TIMESTAMP '2018-01-01 13:00:00'").fetchdf()
-# df = df.set_index(df.pop('time'))
-#
-# tspsen = c.define_view("tspsen", """SELECT ?sensor ?setpoint ?thing ?zone WHERE {
-#     ?sensor rdf:type brick:Temperature_Sensor .
-#     ?setpoint rdf:type brick:Temperature_Setpoint .
-#     ?sensor brick:isPointOf ?thing .
-#     ?setpoint brick:isPointOf ?thing .
-#     ?thing brick:controls?/brick:feeds+ ?zone .
-#     ?zone rdf:type brick:HVAC_Zone
-# }""")
-# data = tspsen.merge(df, left_on=['sensor'], right_on=['id'])
-# data = data.merge(df, left_on=['setpoint'], right_on=['id'])

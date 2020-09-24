@@ -73,7 +73,7 @@ class Data:
         #df = self.con.execute(f"SELECT * FROM data WHERE \
         #    time <= '{ts}'").fetchdf()
         # print(f"SELECT time, id, value FROM data WHERE time <= '{ts}'")
-        df = pd.DataFrame.from_records(self.con.execute(f"SELECT time, id, value FROM data WHERE time <= '{ts}'").fetchall())
+        df = pd.DataFrame.from_records(self.con.execute(f"SELECT time, id, value FROM data WHERE time <= '{ts}' LIMIT 200000").fetchall())
         if len(df) == 0:
             return pd.DataFrame(columns=['time', 'id', 'value'])
         df.columns = ['time', 'id', 'value']
@@ -86,7 +86,7 @@ class Data:
         """returns all items of the provided class"""
         res = []
         for item in items:
-            if self.g.query(f"ASK {{ <{item}> rdf:type <{bclass}> }}")[0]:
+            if self.g.query(f"ASK {{ <{item}> rdf:type/rdfs:subClassOf* <{bclass}> }}")[0]:
                 res.append(item)
         return res
 

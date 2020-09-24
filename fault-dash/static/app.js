@@ -103,7 +103,7 @@ window.addEventListener("load", function() {
         },
         created () {
             this.poll();
-            setInterval(this.poll, 5000);
+            setInterval(this.poll, 1000);
         }
     });
 })
