@@ -1,13 +1,21 @@
 import pandas as pd
 import time
+import csv
 import sys
 import gc
 from datetime import datetime
-import duckdb
+import sqlite3
 import glob
 from brickschema.graph import Graph
 from brickschema.inference import BrickInferenceSession
 from brickschema.namespaces import bind_prefixes, BRICK
+
+
+def csv2rows(csvfile):
+    with open(csvfile, 'r') as fp:
+        dr = csv.DictReader(fp)
+        to_db = [(i['time'], i['id'], i['value']) for i in dr]
+    return to_db
 
 
 class Data:
@@ -22,8 +30,9 @@ class Data:
         #self.g = BrickInferenceSession().expand(self.g)
 
         csv_files = glob.glob(f"{directory}/data/*.csv")
-        self.con = duckdb.connect(database=dbfile, read_only=False)
-        self.con.execute("PRAGMA memory_limit='2GB';")
+        self.con = sqlite3.connect(dbfile)
+        self.con.row_factory = sqlite3.Row
+        # self.con.execute("PRAGMA memory_limit='2GB';")
         if doreload:
             self.con.execute("""CREATE TABLE IF NOT EXISTS data(
                 time TIMESTAMP,
@@ -33,7 +42,11 @@ class Data:
             self.con.execute("""CREATE INDEX IF NOT EXISTS data_time_idx \
                                 ON data (time, id)""")
             for csvf in csv_files:
-                self.con.execute(f"COPY data FROM '{csvf}' ( HEADER )")
+                rows = csv2rows(csvf)
+                self.con.executemany("""INSERT OR IGNORE INTO data\
+                            (time, id, value) VALUES(?, ?, ?)""", rows)
+                self.con.commit()
+                # self.con.execute(f"COPY data FROM '{csvf}' ( HEADER )")
             self.con.commit()
             print("loaded!")
 
@@ -42,11 +55,10 @@ class Data:
         Cleans up pinned dataframe references, otherwise we hit OOM
         pretty quick
         """
-        self.con.close()
+        # self.con.close()
         gc.collect()
-        time.sleep(1)
-        self.con = duckdb.connect(database=self.dbfile, read_only=False)
-        self.con.execute("PRAGMA memory_limit='4GB';")
+        # time.sleep(1)
+        # self.con = sqlite3.connect(self.dbfile)
 
     def view(self, query, header=None):
         df = pd.DataFrame.from_records(self.g.query(query))
@@ -58,14 +70,17 @@ class Data:
 
     def data_before(self, dt, uuids=None):
         ts = dt.strftime('%Y-%m-%d %H:%M:%S')
-        df = self.con.execute(f"SELECT * FROM data WHERE \
-            time <= TIMESTAMP '{ts}'").fetchdf()
-        #df = pd.DataFrame.from_records(self.con.execute(f"SELECT * FROM data WHERE \
-        #    time <= TIMESTAMP '{ts}'").fetchall()).copy()
-        #df.columns = [x[0] for x in self.con.description]
+        #df = self.con.execute(f"SELECT * FROM data WHERE \
+        #    time <= '{ts}'").fetchdf()
+        # print(f"SELECT time, id, value FROM data WHERE time <= '{ts}'")
+        df = pd.DataFrame.from_records(self.con.execute(f"SELECT time, id, value FROM data WHERE time <= '{ts}'").fetchall())
+        if len(df) == 0:
+            return pd.DataFrame(columns=['time', 'id', 'value'])
+        df.columns = ['time', 'id', 'value']
+        # df.columns = [x[0] for x in self.con.description]
         if uuids is not None:
             df = df[df['id'].isin(uuids)]
-        return df.set_index(df.pop('time'))
+        return df.set_index(pd.to_datetime(df.pop('time')))
 
     def filter_type(self, items, bclass):
         """returns all items of the provided class"""

@@ -35,9 +35,14 @@ class RogueZoneTemp(FaultProfile):
                 grp.loc[:, 'hsp'] = sps[0]
                 grp.loc[:, 'csp'] = sps[0]
             grp = grp.drop_duplicates()
-            sensor_data = self.db.data_before(upperBound, grp['sensor']).resample('30T').mean()
-            hsp_data = self.db.data_before(upperBound, grp['hsp']).resample('30T').max()
-            csp_data = self.db.data_before(upperBound, grp['csp']).resample('30T').min()
+            sensor_data = self.db.data_before(upperBound, grp['sensor'])
+            hsp_data = self.db.data_before(upperBound, grp['hsp'])
+            csp_data = self.db.data_before(upperBound, grp['csp'])
+            if not (len(sensor_data) and len(hsp_data) and len(csp_data)):
+                continue
+            sensor_data = sensor_data.resample('30T').mean()
+            hsp_data = hsp_data.resample('30T').max()
+            csp_data = csp_data.resample('30T').min()
             df = pd.DataFrame()
             df['hsp'] = hsp_data['value']
             df['csp'] = csp_data['value']
@@ -46,29 +51,23 @@ class RogueZoneTemp(FaultProfile):
             zone_name = zone.split("#")[-1]
             for rng in find_runs(df, df['temp'] < df['hsp']):
                 s, e = rng[0], rng[-1]
+                dur = e-s
                 faults.append({
                     'name': self.name,
                     'key': f"rogue_zone_{zone_name}",
-                    'message': f"Cold zone {zone_name} for {s} - {e}",
+                    'message': f"Cold zone {zone_name} for {dur}",
                     'last_detected': e,
                 })
                 print(f"Cold room for {rng}")
 
             for rng in find_runs(df, df['temp'] > df['csp']):
                 s, e = rng[0], rng[-1]
+                dur = e-s
                 faults.append({
                     'name': self.name,
                     'key': f"rogue_zone_{zone.split('#')[-1]}",
-                    'message': f"Hot zone {zone_name} for {s} - {e}",
+                    'message': f"Hot zone {zone_name} for {dur}",
                     'last_detected': e,
                 })
                 print(f"Hot room for {rng}")
-            #self.db.con.unregister(sensor_data)
-            #self.db.con.unregister(hsp_data)
-            #self.db.con.unregister(csp_data)
-            del df
-            del sensor_data
-            del hsp_data
-            del csp_data
-            self.db.gc()
         return faults

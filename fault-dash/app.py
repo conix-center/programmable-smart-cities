@@ -10,28 +10,27 @@ app = Flask(__name__, static_url_path='/static')
 app.logger.setLevel(logging.INFO)
 
 
-# 'impls' contains a list of all of the FaultProfile instances that produce
-# faults which will be displayed on the dashboard. To add a new fault
-# generator, read faults/profile.py and subclass it (see faults/demo.py and
-# faults/demo_vavs.py for examples), making sure to implement the required
-# method. Instantiate the generator as needed and append to the 'impls' list
-impls = []
-from faults.demo import DemoFault
-impls.append(DemoFault())
-from faults.demo_vavs import VAVDemoFault
-impls.append(VAVDemoFault(5))
-from faults.rogue_zone_temp import RogueZoneTemp
-impls.append(RogueZoneTemp("ciee", "ciee"))
-
-historical_ranges = pd.date_range('2018-01-01', '2019-01-01', freq='24H')
-historical_idx = 0
 
 # do one update loop and read from shared status
 statusLock = threading.Lock()
 statuses = []
 def update(interval):
     global statuses
-    global historical_idx
+    # 'impls' contains a list of all of the FaultProfile instances that produce
+    # faults which will be displayed on the dashboard. To add a new fault
+    # generator, read faults/profile.py and subclass it (see faults/demo.py and
+    # faults/demo_vavs.py for examples), making sure to implement the required
+    # method. Instantiate the generator as needed and append to the 'impls' list
+    impls = []
+    from faults.demo import DemoFault
+    impls.append(DemoFault())
+    from faults.demo_vavs import VAVDemoFault
+    impls.append(VAVDemoFault(5))
+    from faults.rogue_zone_temp import RogueZoneTemp
+    impls.append(RogueZoneTemp("ciee", "ciee"))
+
+    historical_ranges = pd.date_range('2018-01-01', '2019-01-01', freq='24H')
+    historical_idx = 0
     while True:
         historical_upper_bound = historical_ranges[historical_idx]
         statusLock.acquire()
