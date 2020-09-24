@@ -1,4 +1,5 @@
 from flask import Flask, request, json, jsonify, redirect
+import pandas as pd
 import logging
 import time
 import inspect
@@ -19,22 +20,30 @@ from faults.demo import DemoFault
 impls.append(DemoFault())
 from faults.demo_vavs import VAVDemoFault
 impls.append(VAVDemoFault(5))
+from faults.rogue_zone_temp import RogueZoneTemp
+impls.append(RogueZoneTemp("ciee", "ciee"))
+
+historical_ranges = pd.date_range('2018-01-01', '2019-01-01', freq='24H')
+historical_idx = 0
 
 # do one update loop and read from shared status
 statusLock = threading.Lock()
 statuses = []
 def update(interval):
     global statuses
+    global historical_idx
     while True:
+        historical_upper_bound = historical_ranges[historical_idx]
         statusLock.acquire()
         statuses = []
         for impl in impls:
             code = inspect.getsource(inspect.getmodule(impl))
-            for fault in impl.get_fault_up_until(datetime.now()):
+            for fault in impl.get_fault_up_until(historical_upper_bound):
                 fault['code'] = code
                 statuses.append(fault)
         statusLock.release()
         time.sleep(interval)
+        historical_idx += 1
 
 @app.route('/', methods=['GET'])
 def root():

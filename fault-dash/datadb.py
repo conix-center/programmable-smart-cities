@@ -1,0 +1,147 @@
+import pandas as pd
+import time
+import sys
+import gc
+from datetime import datetime
+import duckdb
+import glob
+from brickschema.graph import Graph
+from brickschema.inference import BrickInferenceSession
+from brickschema.namespaces import bind_prefixes, BRICK
+
+
+class Data:
+    def __init__(self, directory, dbfile, doreload=False):
+        self.dbfile = dbfile
+        ttl_files = glob.glob(f"{directory}/*.ttl")
+        #self.g = Graph(load_brick=False)
+        #bind_prefixes(self.g)
+        #for ttlf in ttl_files:
+        #    print(ttlf)
+        #    self.g.load_file(ttlf)
+        #self.g = BrickInferenceSession().expand(self.g)
+
+        csv_files = glob.glob(f"{directory}/data/*.csv")
+        self.con = duckdb.connect(database=dbfile, read_only=False)
+        self.con.execute("PRAGMA memory_limit='2GB';")
+        if doreload:
+            self.con.execute("""CREATE TABLE IF NOT EXISTS data(
+                time TIMESTAMP,
+                id VARCHAR,
+                value REAL
+            );""")
+            self.con.execute("""CREATE INDEX IF NOT EXISTS data_time_idx \
+                                ON data (time, id)""")
+            for csvf in csv_files:
+                self.con.execute(f"COPY data FROM '{csvf}' ( HEADER )")
+            self.con.commit()
+            print("loaded!")
+
+    def gc(self):
+        """
+        Cleans up pinned dataframe references, otherwise we hit OOM
+        pretty quick
+        """
+        self.con.close()
+        gc.collect()
+        time.sleep(1)
+        self.con = duckdb.connect(database=self.dbfile, read_only=False)
+        self.con.execute("PRAGMA memory_limit='4GB';")
+
+    def view(self, query, header=None):
+        df = pd.DataFrame.from_records(self.g.query(query))
+        if header is not None:
+            df.columns = header
+        for col in df.columns:
+            df[col] = df[col].astype(str)
+        return df
+
+    def data_before(self, dt, uuids=None):
+        ts = dt.strftime('%Y-%m-%d %H:%M:%S')
+        df = self.con.execute(f"SELECT * FROM data WHERE \
+            time <= TIMESTAMP '{ts}'").fetchdf()
+        #df = pd.DataFrame.from_records(self.con.execute(f"SELECT * FROM data WHERE \
+        #    time <= TIMESTAMP '{ts}'").fetchall()).copy()
+        #df.columns = [x[0] for x in self.con.description]
+        if uuids is not None:
+            df = df[df['id'].isin(uuids)]
+        return df.set_index(df.pop('time'))
+
+    def filter_type(self, items, bclass):
+        """returns all items of the provided class"""
+        res = []
+        for item in items:
+            if self.g.query(f"ASK {{ <{item}> rdf:type <{bclass}> }}")[0]:
+                res.append(item)
+        return res
+
+    def filter_type2(self, c, items, bclass):
+        """returns all items of the provided class"""
+        res = []
+        for item in items:
+            if c.is_type(item, bclass):
+                res.append(item)
+        return res
+
+def merge_dfs(dfs, value_cols=None):
+    for (idx, df) in enumerate(dfs):
+        newname = value_cols[idx] if value_cols is not None else f"value_{idx}"
+        dfs[idx] = df.rename(columns={'value': newname})
+    return pd.concat(dfs)
+
+
+def find_runs(df, cond):
+    #returns ranges of index where 'ser' is True
+    rdf = df[cond].copy()
+    rdf.loc[:, '_rng'] = cond.astype(int).diff(1).cumsum()
+    rdf.loc[:, '_grp'] = cond.astype(int).diff().ne(0).cumsum()
+    for (_, idx) in rdf.groupby('_grp')['_rng']:
+        if len(idx) < 2: continue
+        yield (idx.index[0], idx.index[-1])
+
+
+if __name__ == '__main__':
+    doreload = len(sys.argv) > 2 and sys.argv[2] == 'reload'
+    db = Data("../buildings/ebu3b", sys.argv[1], doreload=doreload)
+
+    from db import ReasonableClient
+    c = ReasonableClient("http://localhost:8000")
+    # c.load_file("../buildings/ciee/ciee.ttl")
+    c.load_file("../buildings/ebu3b/ebu3b_mapped.ttl")
+
+    tspsen = """SELECT ?sensor ?setpoint ?thing ?zone WHERE {
+        ?sensor rdf:type brick:Temperature_Sensor .
+        ?setpoint rdf:type brick:Temperature_Setpoint .
+        ?sensor brick:isPointOf ?thing .
+        ?setpoint brick:isPointOf ?thing .
+        ?thing brick:controls?/brick:feeds+ ?zone .
+        ?zone rdf:type brick:HVAC_Zone
+    }"""
+    tspsen = c.define_view('tspsen', tspsen)
+    print(tspsen)
+
+    # tspsen = db.view(tspsen, header=['sensor', 'setpoint', 'thing', 'zone'])
+    for (zone, grp) in tspsen.groupby('zone'):
+        sps = grp.pop('setpoint')
+        if len(sps.unique()) == 2:
+            # use bounds
+            grp.loc[:, 'hsp'] = db.filter_type2(c, sps, BRICK['Heating_Temperature_Setpoint'])[0]
+            grp.loc[:, 'csp'] = db.filter_type2(c, sps, BRICK['Cooling_Temperature_Setpoint'])[0]
+        elif len(sps.unique()) == 1:
+            grp.loc[:, 'hsp'] = sps[0]
+            grp.loc[:, 'csp'] = sps[0]
+        grp = grp.drop_duplicates()
+        before = datetime.now()
+        sensor_data = db.data_before(before, grp['sensor']).resample('15T').mean()
+        hsp_data = db.data_before(before, grp['hsp']).resample('15T').max()
+        csp_data = db.data_before(before, grp['csp']).resample('15T').min()
+        df = pd.DataFrame()
+        df['hsp'] = hsp_data['value']
+        df['csp'] = csp_data['value']
+        df['temp'] = sensor_data['value']
+
+        for rng in find_runs(df, df['temp'] < df['hsp']):
+            print(f"Cold room for {rng}")
+
+        for rng in find_runs(df, df['temp'] > df['csp']):
+            print(f"Hot room for {rng}")
