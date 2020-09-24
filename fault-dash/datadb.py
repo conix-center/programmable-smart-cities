@@ -110,9 +110,15 @@ def find_runs(df, cond):
     rdf = df[cond].copy()
     rdf.loc[:, '_rng'] = cond.astype(int).diff(1).cumsum()
     rdf.loc[:, '_grp'] = cond.astype(int).diff().ne(0).cumsum()
-    for (_, idx) in rdf.groupby('_grp')['_rng']:
+    for (c, (_, idx)) in enumerate(rdf.groupby('_grp')['_rng']):
+        if c == 0: continue
         if len(idx) < 2: continue
         yield (idx.index[0], idx.index[-1])
+
+def runs_longer_than(runs, dur):
+    for run in runs:
+        if (run[-1] - run[0]) > dur:
+            yield run
 
 
 if __name__ == '__main__':

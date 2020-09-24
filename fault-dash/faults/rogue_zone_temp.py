@@ -1,9 +1,10 @@
 from .profile import FaultProfile
-from db import ReasonableClient
-from datadb import Data, find_runs
+from rclient import ReasonableClient
+from datadb import Data, find_runs, runs_longer_than
 from brickschema.namespaces import BRICK
 import pandas as pd
 import os
+
 
 class RogueZoneTemp(FaultProfile):
     def __init__(self, building, model_name):
@@ -20,7 +21,8 @@ class RogueZoneTemp(FaultProfile):
         }"""
         self.tspsen = self.c.define_view('tspsen', tspsen)
         doreload = not os.path.exists(f"{building}.db")
-        self.db = Data(f"../buildings/{building}", f"{building}.db", doreload=doreload)
+        self.db = Data(f"../buildings/{building}", f"{building}.db",
+                       doreload=doreload)
         super().__init__("RogueZoneTemp")
 
     def get_fault_up_until(self, upperBound):
@@ -49,27 +51,37 @@ class RogueZoneTemp(FaultProfile):
             df['csp'] = csp_data['value']
             df['temp'] = sensor_data['value']
 
+            print(df.head())
+
             zone_name = zone.split("#")[-1]
-            for rng in find_runs(df, df['temp'] < df['hsp']):
-                s, e = rng[0], rng[-1]
-                # TODO: check if > 4 hours
-                dur = e-s
+
+            duration_min = pd.to_timedelta('4H')
+            cold_spots = list(runs_longer_than(find_runs(df, df['temp'] < df['hsp']), duration_min))
+            if len(cold_spots) > 0:
+                most_recent = cold_spots[-1]
+                dur = most_recent[-1] - most_recent[0]
                 faults.append({
                     'name': self.name,
                     'key': f"rogue_zone_{zone_name}",
-                    'message': f"Cold zone {zone_name} for {dur}",
-                    'last_detected': e,
+                    'message': f"Cold zone for {dur}",
+                    'last_detected': most_recent[-1],
+                    'details': {
+                        'Zone': zone_name
+                    }
                 })
-                print(f"Cold room for {rng}")
 
-            for rng in find_runs(df, df['temp'] > df['csp']):
-                s, e = rng[0], rng[-1]
-                dur = e-s
+            hot_spots = list(runs_longer_than(find_runs(df, df['temp'] > df['csp']), duration_min))
+            if len(hot_spots) > 0:
+                most_recent = hot_spots[-1]
+                dur = most_recent[-1] - most_recent[0]
                 faults.append({
                     'name': self.name,
-                    'key': f"rogue_zone_{zone.split('#')[-1]}",
-                    'message': f"Hot zone {zone_name} for {dur}",
-                    'last_detected': e,
+                    'key': f"rogue_zone_{zone_name}",
+                    'message': f"Hot zone for {dur}",
+                    'last_detected': most_recent[-1],
+                    'details': {
+                        'Zone': zone_name
+                    }
                 })
-                print(f"Hot room for {rng}")
+
         return faults

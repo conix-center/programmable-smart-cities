@@ -88,12 +88,17 @@ window.addEventListener("load", function() {
         el: '#app',
         data: {
             statuses: [],
+            worldtime: dayjs(),
         },
         methods: {
             poll: function() {
                 fetch('/get_status')
                     .then(resp => resp.json())
-                    .then(data => this.statuses = data)
+                    .then(data => {
+                        console.log(data);
+                        this.statuses = data.statuses;
+                        this.worldtime = dayjs(data.time);
+                    })
             },
         },
         created () {
