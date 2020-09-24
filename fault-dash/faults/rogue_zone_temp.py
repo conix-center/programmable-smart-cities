@@ -35,6 +35,7 @@ class RogueZoneTemp(FaultProfile):
                 grp.loc[:, 'hsp'] = sps[0]
                 grp.loc[:, 'csp'] = sps[0]
             grp = grp.drop_duplicates()
+
             sensor_data = self.db.data_before(upperBound, grp['sensor'])
             hsp_data = self.db.data_before(upperBound, grp['hsp'])
             csp_data = self.db.data_before(upperBound, grp['csp'])
@@ -51,6 +52,7 @@ class RogueZoneTemp(FaultProfile):
             zone_name = zone.split("#")[-1]
             for rng in find_runs(df, df['temp'] < df['hsp']):
                 s, e = rng[0], rng[-1]
+                # TODO: check if > 4 hours
                 dur = e-s
                 faults.append({
                     'name': self.name,
