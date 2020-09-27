@@ -49,7 +49,6 @@ def update(interval):
         statusLock.release()
         time.sleep(interval)
         historical_idx += 1
-        break
 
 
 @app.route('/', methods=['GET'])
