@@ -31,6 +31,8 @@ def update(interval):
     impls.append(VAVDemoFault(5))
     from faults.rogue_zone_temp import RogueZoneTemp
     impls.append(RogueZoneTemp("ciee", "ciee"))
+    from faults.vav_airflow import VAVAirflow
+    impls.append(VAVAirflow())
 
     historical_ranges = pd.date_range('2018-01-03', '2019-01-01', freq='24H')
     historical_idx = 0
@@ -47,6 +49,7 @@ def update(interval):
         statusLock.release()
         time.sleep(interval)
         historical_idx += 1
+        break
 
 
 @app.route('/', methods=['GET'])
