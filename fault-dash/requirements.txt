@@ -1,1 +1,4 @@
 Flask
+Pandas
+bz2
+brickschema
