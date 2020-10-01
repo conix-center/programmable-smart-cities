@@ -1181,13 +1181,13 @@ bldg:Sensor30005f_state a brick:Lighting_State .
 bldg:CentralZone a brick:HVAC_Zone ;
     brick:hasSite bldg:ciee .
 
-bldg:hvac_zone_centralzone_tstat_cooling_setpoint a brick:Supply_Air_Temperature_Cooling_Setpoint ;
+bldg:hvac_zone_centralzone_tstat_cooling_setpoint a brick:Cooling_Temperature_Setpoint ;
     brick:hasSite bldg:ciee .
 
 bldg:hvac_zone_centralzone_tstat_fan a brick:Fan_Command ;
     brick:hasSite bldg:ciee .
 
-bldg:hvac_zone_centralzone_tstat_heating_setpoint a brick:Supply_Air_Temperature_Heating_Setpoint ;
+bldg:hvac_zone_centralzone_tstat_heating_setpoint a brick:Heating_Temperature_Setpoint ;
     brick:hasSite bldg:ciee .
 
 bldg:hvac_zone_centralzone_tstat_mode a brick:Thermostat_Mode_Command ;
@@ -1202,13 +1202,13 @@ bldg:hvac_zone_centralzone_tstat_state a brick:Thermostat_Status ;
 bldg:hvac_zone_centralzone_tstat_temperature a brick:Temperature_Sensor ;
     brick:hasSite bldg:ciee .
 
-bldg:hvac_zone_eastzone_tstat_cooling_setpoint a brick:Supply_Air_Temperature_Cooling_Setpoint ;
+bldg:hvac_zone_eastzone_tstat_cooling_setpoint a brick:Cooling_Temperature_Setpoint ;
     brick:hasSite bldg:ciee .
 
 bldg:hvac_zone_eastzone_tstat_fan a brick:Fan_Command ;
     brick:hasSite bldg:ciee .
 
-bldg:hvac_zone_eastzone_tstat_heating_setpoint a brick:Supply_Air_Temperature_Heating_Setpoint ;
+bldg:hvac_zone_eastzone_tstat_heating_setpoint a brick:Heating_Temperature_Setpoint ;
     brick:hasSite bldg:ciee .
 
 bldg:hvac_zone_eastzone_tstat_mode a brick:Thermostat_Mode_Command ;
@@ -1223,13 +1223,13 @@ bldg:hvac_zone_eastzone_tstat_state a brick:Thermostat_Status ;
 bldg:hvac_zone_eastzone_tstat_temperature a brick:Temperature_Sensor ;
     brick:hasSite bldg:ciee .
 
-bldg:hvac_zone_northzone_tstat_cooling_setpoint a brick:Supply_Air_Temperature_Cooling_Setpoint ;
+bldg:hvac_zone_northzone_tstat_cooling_setpoint a brick:Cooling_Temperature_Setpoint ;
     brick:hasSite bldg:ciee .
 
 bldg:hvac_zone_northzone_tstat_fan a brick:Fan_Command ;
     brick:hasSite bldg:ciee .
 
-bldg:hvac_zone_northzone_tstat_heating_setpoint a brick:Supply_Air_Temperature_Heating_Setpoint ;
+bldg:hvac_zone_northzone_tstat_heating_setpoint a brick:Heating_Temperature_Setpoint ;
     brick:hasSite bldg:ciee .
 
 bldg:hvac_zone_northzone_tstat_mode a brick:Thermostat_Mode_Command ;
@@ -1244,13 +1244,13 @@ bldg:hvac_zone_northzone_tstat_state a brick:Thermostat_Status ;
 bldg:hvac_zone_northzone_tstat_temperature a brick:Temperature_Sensor ;
     brick:hasSite bldg:ciee .
 
-bldg:hvac_zone_southzone_tstat_cooling_setpoint a brick:Supply_Air_Temperature_Cooling_Setpoint ;
+bldg:hvac_zone_southzone_tstat_cooling_setpoint a brick:Cooling_Temperature_Setpoint ;
     brick:hasSite bldg:ciee .
 
 bldg:hvac_zone_southzone_tstat_fan a brick:Fan_Command ;
     brick:hasSite bldg:ciee .
 
-bldg:hvac_zone_southzone_tstat_heating_setpoint a brick:Supply_Air_Temperature_Heating_Setpoint ;
+bldg:hvac_zone_southzone_tstat_heating_setpoint a brick:Heating_Temperature_Setpoint ;
     brick:hasSite bldg:ciee .
 
 bldg:hvac_zone_southzone_tstat_mode a brick:Thermostat_Mode_Command ;

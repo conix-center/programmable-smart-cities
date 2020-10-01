@@ -22,7 +22,7 @@ def parse_uri(s):
 def csv2rows(csvfile):
     with open(csvfile, 'r') as fp:
         dr = csv.DictReader(fp)
-        to_db = [(i['timestamp'], i['id'], i['value']) for i in dr]
+        to_db = [(i['time'], i['id'], i['value']) for i in dr]
     return to_db
 
 
