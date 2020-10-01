@@ -14,6 +14,15 @@ statusLock = threading.Lock()
 statuses = []
 world_time = datetime.now()
 
+building = 'ebu3b'
+ttl_file = 'ebu3b_mapped'
+start_date = '2020-02-01'
+end_date = '2020-02-05'
+
+# building = 'ciee'
+# ttl_file = 'ciee'
+# start_date = '2020-01-01'
+# end_date = '2020-02-05'
 
 def update(interval):
     global statuses

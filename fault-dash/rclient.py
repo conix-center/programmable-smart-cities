@@ -2,6 +2,10 @@ import pandas as pd
 import rdflib
 import requests
 
+#### IMPORTANT
+# Run the binary downloaded from here which is the backing server
+# for this client https://github.com/gtfierro/reasonable/releases/tag/conix-v1
+
 
 class View(pd.DataFrame):
     _metadata = ['_view_name', '_view_addr']
