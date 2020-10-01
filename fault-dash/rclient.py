@@ -1,5 +1,4 @@
 import pandas as pd
-import time
 import rdflib
 import requests
 
@@ -42,17 +41,19 @@ class ReasonableClient:
         resp = requests.post(f"{self.addr}/make", json=req)
         if not resp.ok:
             raise Exception("Could not make view")
-        time.sleep(2)
         return self.get_view(name)
 
     def load_file(self, filename):
         self.g.parse(filename, format=filename.split('.')[-1])
         trips = list(self.g)
         print(f"Loading {len(trips)} triples")
-        rng = list(range(0, len(trips), 2000)) + [len(trips)]
+        rng = list(range(0, len(trips), 5000)) + [len(trips)]
         for x, y in zip(rng[:-1], rng[1:]):
             print(x, y, len(trips[x:y]))
-            resp = requests.post(f"{self.addr}/add", json=trips[x:y])
+            # choose nonblocking endpoint if we are bulk loading
+            endpoint = "addnb" if y!=len(trips) else "add"
+            url = f"{self.addr}/{endpoint}"
+            resp = requests.post(url, json=trips[x:y])
             if not resp.ok:
                 raise Exception("Could not add triples", resp.content)
 
@@ -61,6 +62,7 @@ class ReasonableClient:
         resp = requests.post(f"{self.addr}/query", json=q)
         return resp.json()[0][0] == 'true'
 
+
 if __name__ == '__main__':
     c = ReasonableClient("http://localhost:8000")
 
@@ -68,8 +70,8 @@ if __name__ == '__main__':
         ?sensor rdf:type brick:Temperature_Sensor
     }""")
 
-
-    tspsen = c.define_view("tspsen", """SELECT ?sensor ?setpoint ?thing ?zone WHERE {
+    tspsen = c.define_view("tspsen", """SELECT ?sensor ?setpoint ?thing ?zone
+    WHERE {
         ?sensor rdf:type brick:Temperature_Sensor .
         ?setpoint rdf:type brick:Temperature_Setpoint .
         ?sensor brick:isPointOf ?thing .

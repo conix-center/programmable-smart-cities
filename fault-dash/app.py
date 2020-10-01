@@ -27,12 +27,12 @@ def update(interval):
     impls = []
     from faults.demo import DemoFault
     impls.append(DemoFault())
-    from faults.demo_vavs import VAVDemoFault
-    impls.append(VAVDemoFault(5))
+    # from faults.demo_vavs import VAVDemoFault
+    # impls.append(VAVDemoFault(5))
     from faults.rogue_zone_temp import RogueZoneTemp
-    impls.append(RogueZoneTemp("ciee", "ciee"))
+    impls.append(RogueZoneTemp(building, ttl_file))
 
-    historical_ranges = pd.date_range('2018-01-03', '2019-01-01', freq='24H')
+    historical_ranges = pd.date_range(start_date, end_date, freq='24H')
     historical_idx = 0
     while True:
         historical_upper_bound = historical_ranges[historical_idx]

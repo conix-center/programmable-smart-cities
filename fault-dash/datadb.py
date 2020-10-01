@@ -3,7 +3,7 @@ import time
 import csv
 import sys
 import gc
-from datetime import datetime
+from datetime import datetime, timedelta
 import sqlite3
 import glob
 from brickschema.graph import Graph
@@ -70,16 +70,17 @@ class Data:
 
     def data_before(self, dt, uuids=None):
         ts = dt.strftime('%Y-%m-%d %H:%M:%S')
-        #df = self.con.execute(f"SELECT * FROM data WHERE \
-        #    time <= '{ts}'").fetchdf()
-        # print(f"SELECT time, id, value FROM data WHERE time <= '{ts}'")
-        df = pd.DataFrame.from_records(self.con.execute(f"SELECT time, id, value FROM data WHERE time <= '{ts}' LIMIT 200000").fetchall())
+        tsb = (dt - timedelta(days=1)).strftime('%Y-%m-%d %H:%M:%S')
+        uuids = list(uuids.values)
+        array = ', '.join(['?'] * len(uuids))
+        df = pd.DataFrame.from_records(self.con.execute(f"SELECT time, id, value FROM data WHERE time >= '{tsb}' AND time <= '{ts}' and id IN ({array})", uuids).fetchall())
         if len(df) == 0:
             return pd.DataFrame(columns=['time', 'id', 'value'])
         df.columns = ['time', 'id', 'value']
         # df.columns = [x[0] for x in self.con.description]
-        if uuids is not None:
-            df = df[df['id'].isin(uuids)]
+        # print(df.head())
+        #if uuids is not None:
+        #    df = df[df['id'].isin(uuids)]
         return df.set_index(pd.to_datetime(df.pop('time')))
 
     def filter_type(self, items, bclass):

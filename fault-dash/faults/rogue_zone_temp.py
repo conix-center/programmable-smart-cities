@@ -44,7 +44,6 @@ class RogueZoneTemp(FaultProfile):
                     grp.loc[:, 'hsp'] = hsps[0]
                     grp.loc[:, 'csp'] = csps[0]
                 elif len(sps.unique()) == 1:
-                    print(sps)
                     grp.loc[:, 'hsp'] = sps.values[0]
                     grp.loc[:, 'csp'] = sps.values[0]
                 else:
@@ -52,52 +51,27 @@ class RogueZoneTemp(FaultProfile):
                 grp = grp.drop_duplicates()
                 self.grps[zone] = grp
             break
-
-
         super().__init__("RogueZoneTemp")
 
     def get_fault_up_until(self, upperBound):
         faults = []
-        #self.tspsen = self.tspsen.refresh()
-        #if len(self.tspsen) == 0:
-        #    return faults
-        #for (zone, grp) in self.tspsen.groupby('zone'):
-        #    sps = grp.pop('setpoint')
-        #    if len(sps.unique()) > 1:
-        #        # use bounds
-        #        hsps = self.db.filter_type2(self.c, sps, BRICK['Heating_Temperature_Setpoint'])
-        #        csps = self.db.filter_type2(self.c, sps, BRICK['Cooling_Temperature_Setpoint'])
-        #        if len(hsps) == 0 or len(csps) == 0:
-        #            continue
-        #        grp.loc[:, 'hsp'] = hsps[0]
-        #        grp.loc[:, 'csp'] = csps[0]
-        #    elif len(sps.unique()) == 1:
-        #        print(sps)
-        #        grp.loc[:, 'hsp'] = sps.values[0]
-        #        grp.loc[:, 'csp'] = sps.values[0]
-        #    else:
-        #        continue
-        #    grp = grp.drop_duplicates()
         for (zone, grp) in self.grps.items():
-
             sensor_data = self.db.data_before(upperBound, grp['sensor'])
             hsp_data = self.db.data_before(upperBound, grp['hsp'])
             csp_data = self.db.data_before(upperBound, grp['csp'])
             if not (len(sensor_data) and len(hsp_data) and len(csp_data)):
                 continue
             sensor_data = sensor_data.resample('30T').mean()
-            hsp_data = hsp_data.resample('30T').max()
-            csp_data = csp_data.resample('30T').min()
+            hsp_data = hsp_data.resample('30T').min()
+            csp_data = csp_data.resample('30T').max()
             df = pd.DataFrame()
             df['hsp'] = hsp_data['value']
             df['csp'] = csp_data['value']
             df['temp'] = sensor_data['value']
 
-            print(df.head())
-
             zone_name = zone.split("#")[-1]
 
-            duration_min = pd.to_timedelta('2H')
+            duration_min = pd.to_timedelta('5H')
             cold_spots = list(runs_longer_than(find_runs(df, df['temp'] < df['hsp']), duration_min))
             if len(cold_spots) > 0:
                 most_recent = cold_spots[-1]
@@ -106,11 +80,12 @@ class RogueZoneTemp(FaultProfile):
                     'name': self.name,
                     'key': f"rogue_zone_{zone_name}",
                     'message': f"Cold zone for {dur}",
-                    'last_detected': most_recent[-1],
+                    'last_detected': self.get_timestamp(),
                     'details': {
                         'Zone': zone_name
                     }
                 })
+                print(zone_name, 'cold fault')
 
             hot_spots = list(runs_longer_than(find_runs(df, df['temp'] > df['csp']), duration_min))
             if len(hot_spots) > 0:
@@ -120,10 +95,11 @@ class RogueZoneTemp(FaultProfile):
                     'name': self.name,
                     'key': f"rogue_zone_{zone_name}",
                     'message': f"Hot zone for {dur}",
-                    'last_detected': most_recent[-1],
+                    'last_detected': self.get_timestamp(),
                     'details': {
                         'Zone': zone_name
                     }
                 })
+                print(zone_name, 'hot fault')
 
         return faults
