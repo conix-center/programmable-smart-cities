@@ -1,0 +1,5 @@
+building_name: 'ciee'
+ttl_file: '../buildings/ciee/ciee.ttl'
+timeseries_files: '../buildings/ciee/data'
+start_date: '2020-01-01'
+end_date: '2020-02-01'
