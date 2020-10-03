@@ -1,16 +1,20 @@
 from rclient import ReasonableClient
 from datadb import Data
+import yaml
+import sys
 import os
-#building = 'ciee'
-#model_name = 'ciee'
 
-building = 'ebu3b'
-model_name = 'ebu3b_mapped'
+if len(sys.argv) < 2:
+    print("Usage: python initialize.py <config file>")
+    sys.exit(1)
+cfg = yaml.load(open(sys.argv[1]))
+building = cfg['building_name']
+ttl_file = cfg['ttl_file']
 
 print("Loading Brick")
 c = ReasonableClient("http://localhost:8000")
-c.load_file(f"../buildings/{building}/{model_name}.ttl")
+c.load_file(ttl_file)
 
 print("Loading timeseries")
 doreload = not os.path.exists(f"{building}.db")
-db = Data(f"../buildings/{building}", f"{building}.db", doreload=doreload)
+db = Data(cfg["timeseries_files"], f"{building}.db", doreload=doreload)

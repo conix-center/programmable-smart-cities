@@ -4,7 +4,18 @@ import logging
 import time
 import inspect
 import threading
+import sys
 from datetime import datetime
+import yaml
+
+if len(sys.argv) < 2:
+    print("Usage: python initialize.py <config file>")
+    sys.exit(1)
+cfg = yaml.load(open(sys.argv[1]))
+building = cfg['building_name']
+ttl_file = cfg['ttl_file']
+start_date = cfg['start_date']
+end_date = cfg['end_date']
 
 app = Flask(__name__, static_url_path='/static')
 app.logger.setLevel(logging.INFO)
@@ -14,15 +25,6 @@ statusLock = threading.Lock()
 statuses = []
 world_time = datetime.now()
 
-building = 'ebu3b'
-ttl_file = 'ebu3b_mapped'
-start_date = '2020-02-01'
-end_date = '2020-02-05'
-
-# building = 'ciee'
-# ttl_file = 'ciee'
-# start_date = '2020-01-01'
-# end_date = '2020-02-05'
 
 def update(interval):
     global statuses
@@ -40,8 +42,8 @@ def update(interval):
     # impls.append(VAVDemoFault(5))
     from faults.rogue_zone_temp import RogueZoneTemp
     impls.append(RogueZoneTemp(building, ttl_file))
-    from faults.vav_airflow import VAVAirflow
-    impls.append(VAVAirflow()) # TODO: update the initialization here accordingly
+    # from faults.vav_airflow import VAVAirflow
+    # impls.append(VAVAirflow()) # TODO: update the initialization here accordingly
 
     historical_ranges = pd.date_range(start_date, end_date, freq='24H')
     historical_idx = 0
@@ -70,6 +72,7 @@ def get_status():
     global statuses
     statusLock.acquire()
     print(f"Have {len(statuses)} to render")
+    print(statuses)
     res = jsonify({'statuses': statuses,
                    'time': world_time.strftime('%Y-%m-%d %H:%M:%S')})
     statusLock.release()

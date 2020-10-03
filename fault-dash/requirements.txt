@@ -2,3 +2,4 @@ Flask
 Pandas
 bz2
 brickschema
+pyyaml
