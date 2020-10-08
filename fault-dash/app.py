@@ -43,23 +43,24 @@ def update(interval):
     from faults.rogue_zone_temp import RogueZoneTemp
     impls.append(RogueZoneTemp(building, ttl_file))
     # from faults.vav_airflow import VAVAirflow
-    # impls.append(VAVAirflow()) # TODO: update the initialization here accordingly
+    # impls.append(VAVAirflow())
+    # TODO: update the initialization here accordingly
 
-    historical_ranges = pd.date_range(start_date, end_date, freq='24H')
-    historical_idx = 0
+    # loop forever over the historical data
     while True:
-        historical_upper_bound = historical_ranges[historical_idx]
-        world_time = historical_upper_bound
-        statusLock.acquire()
-        statuses = []
-        for impl in impls:
-            code = inspect.getsource(inspect.getmodule(impl))
-            for fault in impl.get_fault_up_until(historical_upper_bound):
-                fault['code'] = code
-                statuses.append(fault)
-        statusLock.release()
-        time.sleep(interval)
-        historical_idx += 1
+        historical_ranges = pd.date_range(start_date, end_date, freq='24H')
+        for historical_idx in range(len(historical_ranges)):
+            historical_upper_bound = historical_ranges[historical_idx]
+            world_time = historical_upper_bound
+            statusLock.acquire()
+            statuses = []
+            for impl in impls:
+                code = inspect.getsource(inspect.getmodule(impl))
+                for fault in impl.get_fault_up_until(historical_upper_bound):
+                    fault['code'] = code
+                    statuses.append(fault)
+            statusLock.release()
+            time.sleep(interval)
 
 
 @app.route('/', methods=['GET'])
