@@ -29,7 +29,7 @@ class Data:
         #    self.g.load_file(ttlf)
         #self.g = BrickInferenceSession().expand(self.g)
 
-        csv_files = glob.glob(f"{directory}/data/*.csv")
+        csv_files = glob.glob(f"{directory}/*.csv")
         self.con = sqlite3.connect(dbfile)
         self.con.row_factory = sqlite3.Row
         # self.con.execute("PRAGMA memory_limit='2GB';")
