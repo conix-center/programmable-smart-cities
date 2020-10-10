@@ -42,9 +42,8 @@ def update(interval):
     # impls.append(VAVDemoFault(5))
     from faults.rogue_zone_temp import RogueZoneTemp
     impls.append(RogueZoneTemp(building, ttl_file))
-    # from faults.vav_airflow import VAVAirflow
-    # impls.append(VAVAirflow())
-    # TODO: update the initialization here accordingly
+    from faults.vav_airflow import VAVAirflow
+    impls.append(VAVAirflow(building))
 
     # loop forever over the historical data
     while True:
