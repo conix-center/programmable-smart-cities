@@ -8,8 +8,8 @@ import time
 
 
 class RogueZoneTemp(FaultProfile):
-    def __init__(self, building, model_name):
-        self.c = ReasonableClient("http://localhost:8000")
+    def __init__(self, building, model_name, bricksql_port):
+        self.c = ReasonableClient(f"http://localhost:{bricksql_port}")
         # self.c.load_file(f"../buildings/{building}/{model_name}.ttl")
 
         tspsen = """SELECT ?sensor ?setpoint ?thing ?zone WHERE {
@@ -18,7 +18,7 @@ class RogueZoneTemp(FaultProfile):
             ?sensor brick:isPointOf ?thing .
             ?setpoint brick:isPointOf ?thing .
             ?thing brick:controls?/brick:feeds+ ?zone .
-            ?zone rdf:type brick:HVAC_Zone .
+            ?zone rdf:type brick:HVAC_Zone
         }"""
         self.tspsen = self.c.define_view('tspsen', tspsen)
         doreload = not os.path.exists(f"{building}.db")
@@ -30,7 +30,8 @@ class RogueZoneTemp(FaultProfile):
             tries -= 1
             self.tspsen = self.tspsen.refresh()
             if len(self.tspsen) == 0:
-                time.sleep(2)
+                print("no results for view; retrying?")
+                time.sleep(5)
                 continue
             for (zone, grp) in self.tspsen.groupby('zone'):
                 sps = grp.pop('setpoint')
@@ -56,6 +57,9 @@ class RogueZoneTemp(FaultProfile):
     def get_fault_up_until(self, upperBound):
         faults = []
         for (zone, grp) in self.grps.items():
+            if len(faults) > 5:
+                break
+            print(grp, upperBound)
             sensor_data = self.db.data_before(upperBound, grp['sensor'])
             hsp_data = self.db.data_before(upperBound, grp['hsp'])
             csp_data = self.db.data_before(upperBound, grp['csp'])
@@ -71,7 +75,7 @@ class RogueZoneTemp(FaultProfile):
 
             zone_name = zone.split("#")[-1]
 
-            duration_min = pd.to_timedelta('2H')
+            duration_min = pd.to_timedelta('5H')
             cold_spots = list(runs_longer_than(find_runs(df, df['temp'] < df['hsp']), duration_min))
             if len(cold_spots) > 0:
                 most_recent = cold_spots[-1]

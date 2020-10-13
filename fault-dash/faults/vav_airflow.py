@@ -8,12 +8,12 @@ import time
 
 
 class VAVAirflow(FaultProfile):
-    
-    def __init__(self, building):
 
-        self.c = ReasonableClient("http://localhost:8000")
+    def __init__(self, building, bricksql_port):
 
-        tspsen = """SELECT ?sensor ?setpoint ?thing ?zone WHERE {
+        self.c = ReasonableClient(f"http://localhost:{bricksql_port}")
+
+        afview = """SELECT ?sensor ?setpoint ?thing ?zone WHERE {
             ?sensor rdf:type brick:Discharge_Air_Flow_Sensor .
             ?setpoint rdf:type brick:Discharge_Air_Flow_Setpoint .
             ?sensor brick:isPointOf ?thing .
@@ -22,7 +22,7 @@ class VAVAirflow(FaultProfile):
             ?zone rdf:type brick:HVAC_Zone .
             FILTER NOT EXISTS { ?thing rdf:type brick:AHU }
         }"""
-        self.tspsen = self.c.define_view('tspsen', tspsen)
+        self.afview = self.c.define_view('afview', afview)
         doreload = not os.path.exists(f"{building}.db")
         self.db = Data(f"../buildings/{building}", f"{building}.db",
                        doreload=doreload)
@@ -30,11 +30,11 @@ class VAVAirflow(FaultProfile):
         tries = 5
         while tries > 0:
             tries -= 1
-            self.tspsen = self.tspsen.refresh()
-            if len(self.tspsen) == 0:
+            self.afview = self.afview.refresh()
+            if len(self.afview) == 0:
                 time.sleep(2)
                 continue
-            for (zone, grp) in self.tspsen.groupby('zone'):
+            for (zone, grp) in self.afview.groupby('zone'):
                 sps = grp.pop('setpoint')
                 if len(sps.unique()) > 0:
                     afsps = self.db.filter_type2(self.c, sps, BRICK['Discharge_Air_Flow_Setpoint'])
@@ -76,7 +76,7 @@ class VAVAirflow(FaultProfile):
                 dur = strfdelta(dur, "{hours} hours and {minutes} minutes")
                 faults.append({
                     'name': self.name,
-                    'key': f'constant-zone-{zone_name}', 
+                    'key': f'constant-zone-{zone_name}',
                     'message': f"VAV flow suspiciously not changing for {dur}",
                     'last_detected': most_recent[-1],
                     'details': {
@@ -92,7 +92,7 @@ class VAVAirflow(FaultProfile):
                 dur = strfdelta(dur, "{hours} hours and {minutes} minutes")
                 faults.append({
                     'name': self.name,
-                    'key': f'constant-zone-{zone_name}', 
+                    'key': f'constant-zone-{zone_name}',
                     'message': f"VAV overflowing (airflow greater than setpoint) for {dur}",
                     'last_detected': most_recent[-1],
                     'details': {

@@ -16,6 +16,8 @@ building = cfg['building_name']
 ttl_file = cfg['ttl_file']
 start_date = cfg['start_date']
 end_date = cfg['end_date']
+bricksql_port = cfg['bricksql_port']
+listen_port = cfg['listen_port']
 
 app = Flask(__name__, static_url_path='/static')
 app.logger.setLevel(logging.INFO)
@@ -41,9 +43,9 @@ def update(interval):
     # from faults.demo_vavs import VAVDemoFault
     # impls.append(VAVDemoFault(5))
     from faults.rogue_zone_temp import RogueZoneTemp
-    impls.append(RogueZoneTemp(building, ttl_file))
+    impls.append(RogueZoneTemp(building, ttl_file, bricksql_port))
     from faults.vav_airflow import VAVAirflow
-    impls.append(VAVAirflow(building))
+    impls.append(VAVAirflow(building, bricksql_port))
 
     # loop forever over the historical data
     while True:
@@ -53,6 +55,7 @@ def update(interval):
             world_time = historical_upper_bound
             statusLock.acquire()
             statuses = []
+            print("Updating")
             for impl in impls:
                 code = inspect.getsource(inspect.getmodule(impl))
                 for fault in impl.get_fault_up_until(historical_upper_bound):
@@ -74,12 +77,13 @@ def get_status():
     print(f"Have {len(statuses)} to render")
     print(statuses)
     res = jsonify({'statuses': statuses,
+                   'building': building,
                    'time': world_time.strftime('%Y-%m-%d %H:%M:%S')})
     statusLock.release()
     return res
 
 
 if __name__ == '__main__':
-    t = threading.Thread(target=update, args=(1,))
+    t = threading.Thread(target=update, args=(5,))
     t.start()
-    app.run(host='localhost', port='8081')
+    app.run(host='0.0.0.0', port=listen_port)
