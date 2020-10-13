@@ -88,6 +88,7 @@ window.addEventListener("load", function() {
         el: '#app',
         data: {
             statuses: [],
+            building: '<loading>',
             worldtime: dayjs(),
         },
         methods: {
@@ -97,6 +98,7 @@ window.addEventListener("load", function() {
                     .then(data => {
                         console.log(data);
                         this.statuses = data.statuses;
+                        this.building = data.building;
                         this.worldtime = dayjs(data.time);
                     })
             },

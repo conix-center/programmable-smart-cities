@@ -52,6 +52,8 @@ class VAVAirflow(FaultProfile):
     def get_fault_up_until(self, upperBound):
         faults = []
         for (zone, grp) in self.grps.items():
+            if len(faults) > 5:
+                break
             airflow_data = self.db.data_before(upperBound, grp['sensor'])
             afsp_data = self.db.data_before(upperBound, grp['afsp'])
             if not (len(airflow_data) and len(afsp_data)):

@@ -73,7 +73,6 @@ class Data:
         tsb = (dt - timedelta(days=1)).strftime('%Y-%m-%d %H:%M:%S')
         uuids = list(uuids.values)
         array = ', '.join(['?'] * len(uuids))
-        print(f"SELECT time, id, value FROM data WHERE time >= '{tsb}' AND time <= '{ts}' and id IN ({array})", uuids)
         df = pd.DataFrame.from_records(self.con.execute(f"SELECT time, id, value FROM data WHERE time >= '{tsb}' AND time <= '{ts}' and id IN ({array})", uuids).fetchall())
         if len(df) == 0:
             return pd.DataFrame(columns=['time', 'id', 'value'])

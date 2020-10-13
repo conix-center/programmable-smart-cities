@@ -59,7 +59,6 @@ class RogueZoneTemp(FaultProfile):
         for (zone, grp) in self.grps.items():
             if len(faults) > 5:
                 break
-            print(grp, upperBound)
             sensor_data = self.db.data_before(upperBound, grp['sensor'])
             hsp_data = self.db.data_before(upperBound, grp['hsp'])
             csp_data = self.db.data_before(upperBound, grp['csp'])
