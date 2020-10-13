@@ -1,0 +1,7 @@
+building_name: 'calit2'
+ttl_file: '../buildings/calit2/calit2_502.ttl'
+timeseries_files: '../buildings/calit2/data'
+start_date: '2020-10-01'
+end_date: '2020-10-07'
+bricksql_port: 8001
+listen_port: 9001
