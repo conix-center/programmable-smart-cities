@@ -8,7 +8,7 @@
 @prefix tag: <https://brickschema.org/schema/1.1/BrickTag#> .
 @prefix xml: <http://www.w3.org/XML/1998/namespace> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
-@prefix calit2: <http://example.org/calit2#> .
+@prefix calit2: <http://ucsd.edu/building/ontology/calit2#> .
 
 calit2:CALIT2_HW_HW-DP1 a brick:Hot_Water_Differential_Pressure_Sensor .
 

@@ -3,3 +3,5 @@ ttl_file: '../buildings/ebu3b/ebu3b_mapped.ttl'
 timeseries_files: '../buildings/ebu3b/data'
 start_date: '2020-02-01'
 end_date: '2020-02-05'
+bricksql_port: 8002
+listen_port: 9002

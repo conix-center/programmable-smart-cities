@@ -19,7 +19,6 @@ class RogueZoneTemp(FaultProfile):
             ?setpoint brick:isPointOf ?thing .
             ?thing brick:controls?/brick:feeds+ ?zone .
             ?zone rdf:type brick:HVAC_Zone .
-            FILTER NOT EXISTS { ?thing rdf:type brick:AHU }
         }"""
         self.tspsen = self.c.define_view('tspsen', tspsen)
         doreload = not os.path.exists(f"{building}.db")
@@ -51,6 +50,7 @@ class RogueZoneTemp(FaultProfile):
                 grp = grp.drop_duplicates()
                 self.grps[zone] = grp
             break
+        print(self.grps)
         super().__init__("RogueZoneTemp")
 
     def get_fault_up_until(self, upperBound):
@@ -71,7 +71,7 @@ class RogueZoneTemp(FaultProfile):
 
             zone_name = zone.split("#")[-1]
 
-            duration_min = pd.to_timedelta('5H')
+            duration_min = pd.to_timedelta('2H')
             cold_spots = list(runs_longer_than(find_runs(df, df['temp'] < df['hsp']), duration_min))
             if len(cold_spots) > 0:
                 most_recent = cold_spots[-1]
